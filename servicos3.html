@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agendamento - Escolha de Profissional e Serviço</title>
+    <link rel="stylesheet" href="css/style-serviços.css" />
+  </head>
+  <body>
+    <div class="container">
+      <img src="Assets/ClickTime.png" class="logo" />
+      <form class="service">
+        <label for="profissional">Escolha o profissional:</label>
+        <select id="profissional" name="profissional">
+          <option value="">Selecione...</option>
+          <option value="5">Creuza</option>
+          <option value="6">Bebel</option>
+          <option value="7">Aparecida</option>
+        </select>
+
+        <label for="servico">Escolha o serviço:</label>
+        <select id="servico" name="servico">
+          <option value="">Selecione...</option>
+          <option value="17" data-id="17">Aplicação de unhas postiças</option>
+          <option value="18" data-id="18">Aplicação de unhas de Gel</option>
+          <option value="19" data-id="19">Remoção de cutículas</option>
+          <option value="20" data-id="20">
+            Esfoliação e hidratação de mãos e pés
+          </option>
+          <option value="21" data-id="21">Remoção de esmalte</option>
+          <option value="22" data-id="22">
+            Limpeza, corte e modelagem das unhas
+          </option>
+          <option value="23" data-id="23">Aplicação de Esmalte</option>
+        </select>
+
+        <button type="submit"><a>Continuar</a></button>
+      </form>
+      <script>
+        // URL do backend
+        const backendUrl = "http://localhost:4000/";
+
+        // Função para salvar o profissional e serviço escolhidos
+        async function salvarEscolhas(profissionalId, servicoId, empresaId) {
+          try {
+            // Envia os dados para o backend
+            const response = await fetch(`${backendUrl}salvar-escolhas`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                profissionalId,
+                servicoId,
+                empresaId, // Incluindo o ID da empresa
+              }),
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              console.error("Erro ao salvar escolhas:", errorData);
+              throw new Error(errorData.error || "Erro desconhecido.");
+            }
+
+            const data = await response.json();
+            console.log("Escolha salva com sucesso:", data);
+
+            // Redireciona para a tela de escolha de dias e horários após o sucesso
+            window.location.href = "dia-horarios2.html"; // Redireciona para a próxima tela
+          } catch (error) {
+            console.error("Erro ao salvar escolhas:", error);
+            alert(
+              "Erro ao selecionar profissional ou serviço. Tente novamente."
+            );
+          }
+        }
+
+        // Captura o evento de envio do formulário
+        document
+          .getElementById("form-profissional-servico")
+          .addEventListener("submit", (event) => {
+            event.preventDefault(); // Impede o envio normal do formulário
+
+            const profissionalId =
+              document.getElementById("profissional").value; // Pega o valor do profissional escolhido
+            const servicoId = document.getElementById("servico").value; // Pega o valor do serviço escolhido
+            const empresaId = document.getElementById("empresa").value; // Pega o valor da empresa escolhida
+
+            if (!profissionalId || !servicoId || !empresaId) {
+              alert("Por favor, selecione um profissional, serviço e empresa.");
+              return;
+            }
+
+            // Chama a função para salvar as escolhas no backend e redirecionar
+            salvarEscolhas(profissionalId, servicoId, empresaId);
+          });
+      </script>
+    </div>
+  </body>
+</html>

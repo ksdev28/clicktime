@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agendamento - Escolha de Profissional e Serviço</title>
+    <link rel="stylesheet" href="css/style-serviços.css" />
+  </head>
+  <body>
+    <div class="container">
+      <img src="Assets/ClickTime.png" class="logo" />
+      <form class="service" id="form-profissional-servico">
+        <label for="profissional">Escolha o profissional:</label>
+        <select id="profissional" name="profissional">
+          <option value="">Selecione...</option>
+          <option value="1" data-id="1">Kaká</option>
+          <option value="2" data-id="2">Felipe</option>
+        </select>
+
+        <label for="servico">Escolha o serviço:</label>
+        <select id="servico" name="servico">
+          <option value="">Selecione...</option>
+          <option value="1" data-id="1">Corte Simples</option>
+          <option value="2" data-id="2">Corte Social</option>
+          <option value="3" data-id="3">Corte Degradê</option>
+          <option value="4" data-id="4">Americano</option>
+          <option value="5" data-id="5">Low Fade</option>
+          <option value="6" data-id="6">Cabelo e Barba</option>
+          <option value="7" data-id="7">Barba</option>
+          <option value="8" data-id="8">Sobrancelha</option>
+        </select>
+
+        <button type="submit">Continuar</button>
+      </form>
+
+      <script>
+        const backendUrl = "http://localhost:4000/";
+
+        // Obtém o token do localStorage
+        const token = localStorage.getItem("token");
+
+        // Função para salvar as escolhas
+        async function salvarEscolhas(
+          profissionalId,
+          servicoId,
+          empresaId,
+          usuarioId
+        ) {
+          if (!token) {
+            console.error("Token não encontrado!");
+            return;
+          }
+
+          if (!profissionalId || !servicoId || !empresaId || !usuarioId) {
+            console.error("Dados incompletos.");
+            return;
+          }
+
+          const data = { usuarioId, profissionalId, servicoId, empresaId };
+
+          try {
+            const response = await fetch(`${backendUrl}profissional-servico`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(data),
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              console.error("Erro ao salvar escolhas:", errorData);
+              return;
+            }
+
+            const result = await response.json();
+            console.log("Escolhas salvas com sucesso!", result);
+            window.location.href = "confirmacao.html"; // Exemplo de redirecionamento
+          } catch (error) {
+            console.error("Erro ao fazer requisição:", error);
+          }
+        }
+
+        // Captura o evento de envio do formulário
+        document
+          .getElementById("form-profissional-servico")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+            const profissionalId =
+              document.getElementById("profissional").value;
+            const servicoId = document.getElementById("servico").value;
+            const empresaId = localStorage.getItem("empresaId");
+            const usuarioId = localStorage.getItem("usuarioId");
+
+            if (!empresaId || !profissionalId || !servicoId) {
+              alert("Por favor, selecione todos os campos.");
+              return;
+            }
+
+            salvarEscolhas(profissionalId, servicoId, empresaId, usuarioId);
+          });
+      </script>
+    </div>
+  </body>
+</html>

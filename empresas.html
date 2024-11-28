@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClickTime - Escolha de Empresa</title>
+    <link rel="stylesheet" href="css/style-empresas.css" />
+  </head>
+  <body>
+    <div class="empresa-container">
+      <img src="Assets/ClickTime.png" width="200px" class="logo" />
+
+      <!-- Cards de empresas -->
+      <div class="empresa-card" data-id="1">
+        <img
+          src="Assets/Images/cambui.jpg"
+          alt="Barbearia Cambui Logo"
+          class="empresa-logo"
+        />
+        <div class="empresa-info">
+          <h2>Barbearia Cambui</h2>
+          <p>Clique para ver os serviços e horários disponíveis.</p>
+        </div>
+      </div>
+
+      <div class="empresa-card" data-id="2">
+        <img
+          src="Assets/Images/Ingrid.jpg"
+          alt="Studio Ingrid Silva Logo"
+          class="empresa-logo"
+        />
+        <div class="empresa-info">
+          <h2>Studio Ingrid Silva</h2>
+          <p>Clique para ver os serviços e horários disponíveis.</p>
+        </div>
+      </div>
+
+      <div class="empresa-card" data-id="3">
+        <img
+          src="Assets/Images/maria.jpg"
+          alt="Maria Flor Logo"
+          class="empresa-logo"
+        />
+        <div class="empresa-info">
+          <h2>Maria Flor</h2>
+          <p>Clique para ver os serviços e horários disponíveis.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <img src="Assets/Images/foto2.jpg" class="img1" />
+      <img src="Assets/Images/foto1.jpg" class="img2" />
+      <img src="Assets/Images/foto3.jpg" class="img3" />
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const backendUrl = "http://localhost:4000/";
+
+        // Carrega o token e o usuário ID do localStorage
+        const usuarioId = localStorage.getItem("usuarioId");
+        const token = localStorage.getItem("token");
+
+        // Função para salvar a empresa escolhida
+        async function salvarEmpresaEscolhida(empresaId) {
+          if (!token || !usuarioId) {
+            console.error("Token ou usuário não encontrado!");
+            return;
+          }
+
+          const data = {
+            usuarioId: usuarioId,
+            empresaId: empresaId,
+          };
+
+          try {
+            const response = await fetch(`${backendUrl}empresa-escolhida`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+              const result = await response.json();
+              console.log("Sucesso:", result);
+              window.location.href = `servicos${empresaId}.html`;
+            } else {
+              const errorResponse = await response.text();
+              console.error("Erro ao salvar empresa:", errorResponse);
+            }
+          } catch (error) {
+            console.error("Erro ao fazer requisição:", error);
+          }
+        }
+
+        // Captura o clique em qualquer card de empresa
+        const empresaCards = document.querySelectorAll(".empresa-card");
+        empresaCards.forEach(function (card) {
+          card.addEventListener("click", function () {
+            // Recupera o 'data-id' da empresa
+            const empresaId = this.getAttribute("data-id");
+            console.log("Empresa escolhida: ID =", empresaId); // Exibe o ID da empresa no console
+
+            // Adiciona a classe 'selected' para o card clicado (feedback visual)
+            empresaCards.forEach(function (c) {
+              c.classList.remove("selected");
+            });
+            this.classList.add("selected");
+
+            // Armazena o ID da empresa no localStorage
+            localStorage.setItem("empresaId", empresaId);
+
+            // Chama a função para salvar a empresa escolhida
+            salvarEmpresaEscolhida(empresaId);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

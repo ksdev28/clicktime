@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style-dias.css" />
+    <title>Escolha de Data e Horário</title>
+  </head>
+  <body>
+    <div class="container">
+      <img src="Assets/ClickTime.png" class="logo" />
+      <form class="form">
+        <label for="data">Escolha a data:</label>
+        <input type="date" id="data" name="data" required />
+
+        <label for="horario">Escolha o horário:</label>
+        <div class="time-buttons">
+          <button type="button" onclick="selectTime(this)">08:00</button>
+          <button type="button" onclick="selectTime(this)">09:00</button>
+          <button type="button" onclick="selectTime(this)">10:00</button>
+          <button type="button" onclick="selectTime(this)">11:00</button>
+          <button type="button" onclick="selectTime(this)">13:00</button>
+          <button type="button" onclick="selectTime(this)">14:00</button>
+          <button type="button" onclick="selectTime(this)">15:00</button>
+          <button type="button" onclick="selectTime(this)">16:00</button>
+          <button type="button" onclick="selectTime(this)">17:00</button>
+          <button type="button" onclick="selectTime(this)">18:00</button>
+          <button type="button" onclick="selectTime(this)">19:00</button>
+          <button type="button" onclick="selectTime(this)">20:00</button>
+        </div>
+
+        <button type="submit">Confirmar Agendamento</button>
+      </form>
+       <!-- Modal de Notificação -->
+    <div id="notificationModal" class="modal">
+        <div class="modal-content">
+            <p id="notificationMessage"></p>
+            <button onclick="closeModal()">Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        function selectTime(button) {
+            const buttons = document.querySelectorAll('.time-buttons button');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+        }
+        // URL do backend
+const backendUrl = "http://localhost:4000/";
+
+// Função para salvar o agendamento
+async function salvarAgendamento(usuarioId, profissionalId, servicoId, data, horario) {
+  try {
+    // Envia os dados para o backend
+    const response = await fetch(`${backendUrl}agendar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        usuarioId,     // ID do usuário
+        profissionalId, // ID do profissional
+        servicoId,      // ID do serviço
+        data,           // Data escolhida
+        horario         // Horário escolhido
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Erro ao salvar agendamento:", errorData);
+      throw new Error(errorData.error || "Erro desconhecido.");
+    }
+
+    const dataResposta = await response.json();
+    console.log("Agendamento salvo com sucesso:", dataResposta);
+
+    // Redireciona para a página de confirmação ou outras etapas, se necessário
+    window.location.href = "confirmacao-agendamento.html"; // Exemplo de redirecionamento
+  } catch (error) {
+    console.error("Erro ao salvar agendamento:", error);
+    alert("Erro ao agendar. Tente novamente.");
+  }
+}
+
+// Captura o evento de envio do formulário
+document.querySelector(".form").addEventListener("submit", (event) => {
+  event.preventDefault(); // Impede o envio normal do formulário
+
+  // Pega os valores da data e horário escolhidos
+  const data = document.getElementById("data").value; // Data selecionada
+  const horario = document.querySelector(".time-buttons button.selected")?.textContent; // Horário selecionado
+
+  if (!data || !horario) {
+    alert("Por favor, selecione a data e o horário.");
+    return;
+  }
+
+  const profissionalId = document.getElementById("profissional").value; // ID do profissional
+  const servicoId = document.getElementById("servico").value; // ID do serviço
+  const usuarioId = document.getElementById("usuario").value; // ID do usuário (se disponível no frontend)
+
+  // Verifica se os IDs estão preenchidos corretamente
+  if (!profissionalId || !servicoId || !usuarioId) {
+    alert("Por favor, preencha todos os campos.");
+    return;
+  }
+
+  // Chama a função para salvar o agendamento
+  salvarAgendamento(usuarioId, profissionalId, servicoId, data, horario);
+});
+
+    </script>
+  </body>
+</html>

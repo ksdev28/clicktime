@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agendamento de Serviços</title>
+    <link rel="stylesheet" href="style3.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+    />
+  </head>
+  <body>
+    <div class="container" data-aos="fade-up">
+      <h2>Agendar Serviço</h2>
+
+      <div class="form-group">
+        <label for="servico">Escolha o Serviço:</label>
+        <select id="servico">
+          <option value="corte">Corte de Cabelo</option>
+          <option value="manicure">Manicure</option>
+          <option value="massagem">Massagem</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="data">Escolha o Dia:</label>
+        <input type="date" id="data" onchange="mostrarHorariosDisponiveis()" />
+      </div>
+
+      <div class="form-group">
+        <label>Horários Disponíveis:</label>
+        <div class="horarios" id="horarios">
+          <!-- Horários serão inseridos aqui pelo JavaScript -->
+        </div>
+      </div>
+
+      <button class="botao" onclick="confirmarAgendamento()">
+        Confirmar Agendamento
+      </button>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <h3>Agendamento Confirmado!</h3>
+        <p id="modalContent"></p>
+        <button class="botao fechar" onclick="fecharModal()">Fechar</button>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+      AOS.init();
+
+      const horariosDisponiveis = [
+        "09:00",
+        "10:00",
+        "11:00",
+        "14:00",
+        "15:00",
+        "16:00",
+      ];
+
+      function mostrarHorariosDisponiveis() {
+        const horariosDiv = document.getElementById("horarios");
+        horariosDiv.innerHTML = ""; // Limpar horários anteriores
+
+        horariosDisponiveis.forEach((horario) => {
+          const horarioDiv = document.createElement("div");
+          horarioDiv.classList.add("horario");
+          horarioDiv.innerText = horario;
+          horarioDiv.onclick = () => selecionarHorario(horarioDiv);
+          horariosDiv.appendChild(horarioDiv);
+        });
+      }
+
+      function selecionarHorario(element) {
+        document
+          .querySelectorAll(".horario")
+          .forEach((h) => h.classList.remove("selected"));
+        element.classList.add("selected");
+      }
+
+      function confirmarAgendamento() {
+        const servico = document.getElementById("servico").value;
+        const data = document.getElementById("data").value;
+        const horario = document.querySelector(".horario.selected");
+
+        if (!data || !horario) {
+          alert("Por favor, selecione uma data e um horário.");
+          return;
+        }
+
+        const modalContent = document.getElementById("modalContent");
+        modalContent.innerHTML = `<strong>Serviço:</strong> ${servico}<br><strong>Data:</strong> ${data}<br><strong>Horário:</strong> ${horario.innerText}`;
+        document.getElementById("modalOverlay").style.display = "flex";
+      }
+
+      function fecharModal() {
+        document.getElementById("modalOverlay").style.display = "none";
+      }
+    </script>
+  </body>
+</html>

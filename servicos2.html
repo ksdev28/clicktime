@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agendamento - Escolha de Profissional e Serviço</title>
+    <link rel="stylesheet" href="css/style-serviços.css" />
+  </head>
+  <body>
+    <div class="container">
+      <img src="Assets/ClickTime.png" class="logo" />
+      <form class="service">
+        <label for="profissional">Escolha o profissional:</label>
+        <select id="profissional" name="profissional">
+          <option value="">Selecione...</option>
+          <option value="3">Geovana</option>
+          <option value="4">Beatriz</option>
+        </select>
+
+        <label for="servico">Escolha o serviço:</label>
+        <select id="servico" name="servico">
+          <option value="">Selecione...</option>
+          <option value="9" data-id="9">Limpeza de pele</option>
+          <option value="10" data-id="10">Hidratação facial</option>
+          <option value="11" data-id="11">Esfoliação</option>
+          <option value="12" data-id="12">Maquiagem</option>
+          <option value="13" data-id="13">Design de sobrancelhas</option>
+          <option value="14" data-id="14">Depilação</option>
+          <option value="15" data-id="15">Massagem relaxante</option>
+          <option value="16" data-id="16">Massagem terapêutica</option>
+        </select>
+
+        <button type="submit"><a>Continuar</a></button>
+      </form>
+      <script>
+        // URL do backend
+        const backendUrl = "http://localhost:4000/";
+
+        // Função para salvar o profissional e serviço escolhidos
+        async function salvarEscolhas(profissionalId, servicoId, empresaId) {
+          try {
+            // Envia os dados para o backend
+            const response = await fetch(`${backendUrl}salvar-escolhas`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                profissionalId,
+                servicoId,
+                empresaId, // Incluindo o ID da empresa
+              }),
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              console.error("Erro ao salvar escolhas:", errorData);
+              throw new Error(errorData.error || "Erro desconhecido.");
+            }
+
+            const data = await response.json();
+            console.log("Escolha salva com sucesso:", data);
+
+            // Redireciona para a tela de escolha de dias e horários após o sucesso
+            window.location.href = "dia-horarios.html"; // Redireciona para a próxima tela
+          } catch (error) {
+            console.error("Erro ao salvar escolhas:", error);
+            alert(
+              "Erro ao selecionar profissional ou serviço. Tente novamente."
+            );
+          }
+        }
+
+        // Captura o evento de envio do formulário
+        document
+          .getElementById("form-profissional-servico")
+          .addEventListener("submit", (event) => {
+            event.preventDefault(); // Impede o envio normal do formulário
+
+            const profissionalId =
+              document.getElementById("profissional").value; // Pega o valor do profissional escolhido
+            const servicoId = document.getElementById("servico").value; // Pega o valor do serviço escolhido
+            const empresaId = document.getElementById("empresa").value; // Pega o valor da empresa escolhida
+
+            if (!profissionalId || !servicoId || !empresaId) {
+              alert("Por favor, selecione um profissional, serviço e empresa.");
+              return;
+            }
+
+            // Chama a função para salvar as escolhas no backend e redirecionar
+            salvarEscolhas(profissionalId, servicoId, empresaId);
+          });
+      </script>
+    </div>
+  </body>
+</html>

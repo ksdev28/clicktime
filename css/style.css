@@ -1,0 +1,621 @@
+@font-face {
+  font-family: Poppins-Bold;
+  src: url(/Assets/Fonts/Poppins/Poppins-Bold.ttf);
+}
+@font-face {
+  font-family: Poppins-Semibold;
+  src: url(/Assets/Fonts/Poppins/Poppins-SemiBold.ttf);
+}
+@font-face {
+  font-family: Poppins-Regular;
+  src: url(/Assets/Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: Poppins-Black;
+  src: url(/Assets/Fonts/Poppins/Poppins-Black.ttf);
+}
+
+@font-face {
+  font-family: Inter-Black;
+  src: url(/Assets/Fonts/Inter/Inter-Black.ttf);
+}
+@font-face {
+  font-family: Inter-Bold;
+  src: url(/Assets/Fonts/Inter/Inter-Bold.ttf);
+}
+
+@font-face {
+  font-family: Inter-Semibold;
+  src: url(/Assets/Fonts/Inter/Inter-SemiBold.ttf);
+}
+@font-face {
+  font-family: Inter-Regular;
+  src: url(/Assets/Fonts/Inter/Inter-Regular.ttf);
+}
+
+.header {
+  display: flex;
+  align-content: center;
+  width: 100%;
+}
+
+.bar {
+  padding-left: 4rem;
+  height: 97px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.logo {
+  padding-top: 10px;
+  margin-right: 80rem;
+}
+
+.botao {
+  width: 300px;
+  height: 50px;
+  background: #f5f5f5;
+  border-radius: 50px;
+  border: solid;
+  border-color: #94d697;
+}
+
+.label1 {
+  color: #4a4a4a;
+  font-size: 17px;
+  font-family: Inter-Regular;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+body {
+  background-color: #f5f5f5;
+  width: 100%;
+  height: 100%;
+}
+
+.retangulo {
+  top: 21%; /*Distancia retangulo do H1*/
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, +50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #94d697;
+  width: 250px;
+  height: 40px;
+  border-radius: 10px;
+}
+
+.textR {
+  font-family: Inter-Regular;
+  color: #f5f5f5;
+  font-size: 16px;
+}
+
+h1 {
+  font-family: Inter-Bold;
+  color: #94d697;
+  font-size: 50px;
+  word-wrap: break-word;
+  line-height: 55px;
+  text-align: center;
+  padding-top: 10rem;
+}
+
+.paragrap {
+  font-size: 15px;
+  font-family: Inter-Regular;
+  text-align: center;
+  word-break: break-word;
+  color: #4a4a4a;
+}
+.paragrap2 {
+  font-size: 15px;
+  font-family: Inter-Regular;
+  text-align: center;
+  word-break: break-word;
+  color: #4a4a4a;
+}
+
+.conteiner {
+  padding-top: 5rem;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  gap: 50px;
+  width: 100%;
+  height: 300px;
+}
+
+.imagem {
+  border-radius: 50px;
+}
+
+button a:hover {
+  color: #94d697;
+  cursor: pointer;
+}
+
+.carousel-mobile {
+  overflow: hidden;
+  width: 100%;
+  max-width: 350px;
+  height: 220px;
+  margin: auto;
+  border-radius: 40px;
+}
+
+.carousel-inner {
+  margin: auto;
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.carousel-item {
+  margin: auto;
+  width: 100%;
+  flex: 0 0 100%;
+}
+
+@media (min-width: 768px) {
+  .carousel-inner {
+    display: flex;
+    transform: none;
+    width: 100%;
+  }
+
+  .carousel-item {
+    flex: 1;
+    width: auto;
+  }
+  .carousel-mobile {
+    display: none;
+  }
+
+  .paragrap2 {
+    display: none;
+  }
+  .texto2 {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .texto {
+    display: none;
+  }
+  .header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo {
+    margin-right: 62px;
+  }
+
+  .botao {
+    display: none;
+  }
+
+  .retangulo {
+    top: 7rem;
+    width: 190px;
+  }
+
+  .textR {
+    font-size: 14px;
+  }
+
+  h1 {
+    margin-top: -4rem;
+    line-height: 40px;
+    width: 100%;
+    font-size: 2.5rem;
+    text-align: center justify;
+    letter-spacing: -2px;
+  }
+
+  .paragrap {
+    text-align: justify center;
+    font-size: 15px;
+  }
+
+  .paragrap2 {
+    width: 80%;
+    align-items: center;
+    text-align: center justify;
+    font-size: 14px;
+    margin-left: 2.2rem;
+  }
+
+  .conteiner {
+    display: none;
+  }
+
+  .texto2 {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Estilização Pagina 2 */
+
+.table {
+  width: 95%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  row-gap: 50px;
+  justify-content: center;
+}
+
+.service-box {
+  display: flex;
+  flex-direction: column;
+  background-color: none;
+  border: 2.5px solid;
+  color: #4a4a4a;
+  border-radius: 40px;
+  padding: 20px;
+  width: 400px;
+  height: 200px;
+  justify-content: center;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-box:hover {
+  transform: scale(1.05); /* Leve aumento de escala */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra mais intensa */
+}
+
+.service-box h3 {
+  font-family: Inter-Bold;
+  color: #4a4a4a;
+  font-size: 40px;
+  margin: 0;
+}
+
+.service-box p {
+  font-family: Inter-Regular;
+  font-size: 16px;
+  color: #4a4a4a;
+  text-align: left;
+}
+
+.img-verificado {
+  display: flex;
+  width: 65px;
+  height: 65px;
+  transition: transform 0.3s ease;
+}
+
+.title-line {
+  /*Section do Titulo e icones das box's*/
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.titulo2 {
+  /*Quais serviços encontro?*/
+  margin-bottom: 5rem;
+  margin-top: -2rem;
+}
+
+.img-verificado:hover {
+  /*Animação do Icone*/
+  transform: rotate(360deg);
+}
+
+/*Estilização Pagina 3 */
+
+.page3 {
+  margin: 80px;
+  display: inline-table;
+  align-items: center;
+  justify-content: center;
+}
+
+.Titulo3 {
+  /*Garanta Seu Horário!*/
+  margin-top: 150px;
+  text-align: left;
+  width: 700px;
+  color: #4a4a4a;
+  padding: 25px;
+  margin-left: 80px;
+}
+
+.paragrap3 {
+  /*Texto paragráfo*/
+  font-family: Inter-Regular;
+  color: #4a4a4a;
+  text-align: left;
+  width: 550px;
+  font-size: 22px;
+  padding: 20px;
+  margin-left: 5%;
+  text-align: justify left;
+  margin-bottom: 140px; /*Distancia entre o Botão e o Paragrafo*/
+}
+
+.ilustration {
+  /*Ilustração - Imagem Lateral*/
+  display: flex;
+  width: 60%;
+  float: right;
+  justify-content: center;
+  margin-top: -35rem;
+}
+
+.bt-agendamento {
+  display: flex;
+  width: 347px;
+  height: 75px;
+  border-radius: 15px;
+  background-color: #94d697;
+  border-style: none;
+  justify-content: center;
+  align-items: center;
+  margin-left: 100px;
+  margin-top: -5rem;
+}
+
+.bt-label {
+  font-family: Inter-Bold;
+  color: #f5f5f5;
+  font-size: 25px;
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
+  margin: 10px;
+}
+
+a {
+  text-decoration: none;
+  color: #f5f5f5;
+}
+
+.agenda-a:hover {
+  color: #4a4a4a;
+}
+
+/*Footer - Rodapé*/
+
+.footer {
+  width: 100%;
+  background-color: #f5f5f5;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.logo-footer {
+  width: 10%;
+  height: 35px;
+  align-items: center;
+  justify-content: center;
+}
+
+.copy {
+  font-family: Inter-Regular;
+  font-size: 12px;
+  color: #4a4a4a;
+}
+
+.icons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.page2 {
+  width: 100%;
+}
+
+.page3 {
+  width: 100%;
+}
+
+/* Ajustes gerais para responsividade */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos para dispositivos menores que 768px */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .bar {
+    padding-left: 0;
+    flex-direction: column;
+    height: auto;
+  }
+
+  .logo {
+    margin-right: 0;
+    padding: 0;
+    text-align: center;
+  }
+
+  .botao {
+    width: 90%;
+    height: 45px;
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    padding-top: 2rem;
+  }
+
+  .paragrap,
+  .paragrap2 {
+    font-size: 14px;
+    padding: 0 1rem;
+  }
+
+  .conteiner {
+    flex-direction: column;
+    height: auto;
+    gap: 20px;
+  }
+
+  .retangulo {
+    width: 80%;
+    height: 35px;
+  }
+
+  .carousel-mobile {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .service-box {
+    width: 90%;
+    height: auto;
+    padding: 15px;
+  }
+
+  .Titulo3 {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .paragrap3 {
+    width: 90%;
+    font-size: 16px;
+    margin: 0 auto 20px;
+    text-align: justify;
+  }
+
+  .bt-agendamento {
+    width: 90%;
+    height: 60px;
+    margin: 0 auto;
+  }
+
+  .bt-label {
+    font-size: 18px;
+  }
+
+  .ilustration {
+    width: 100%;
+    margin: 0;
+    float: none;
+    text-align: center;
+  }
+
+  .footer {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .icons {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .logo-footer {
+    width: 50%;
+    height: auto;
+  }
+}
+
+/* Estilos para tablets entre 768px e 1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 10px;
+  }
+
+  .bar {
+    padding-left: 2rem;
+  }
+
+  .botao {
+    width: 250px;
+    height: 45px;
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 3rem;
+    line-height: 3.5rem;
+  }
+
+  .conteiner {
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+
+  .retangulo {
+    width: 200px;
+  }
+
+  .service-box {
+    width: 45%;
+    height: auto;
+    padding: 20px;
+  }
+
+  .Titulo3 {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .paragrap3 {
+    width: 80%;
+    font-size: 18px;
+    margin: 0 auto;
+  }
+
+  .bt-agendamento {
+    width: 80%;
+    height: 70px;
+    margin: 0 auto;
+  }
+
+  .ilustration {
+    width: 70%;
+    margin: 0 auto;
+  }
+
+  .footer {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .icons {
+    gap: 15px;
+  }
+
+  .logo-footer {
+    width: 20%;
+    height: auto;
+  }
+}

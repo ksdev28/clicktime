@@ -1,0 +1,95 @@
+@font-face {
+  font-family: Poppins-Bold;
+  src: url(/Assets/Fonts/Poppins/Poppins-Bold.ttf);
+}
+@font-face {
+  font-family: Poppins-Semibold;
+  src: url(/Assets/Fonts/Poppins/Poppins-SemiBold.ttf);
+}
+@font-face {
+  font-family: Poppins-Regular;
+  src: url(/Assets/Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: Poppins-Black;
+  src: url(/Assets/Fonts/Poppins/Poppins-Black.ttf);
+}
+
+@font-face {
+  font-family: Inter-Black;
+  src: url(/Assets/Fonts/Inter/Inter-Black.ttf);
+}
+@font-face {
+  font-family: Inter-Bold;
+  src: url(/Assets/Fonts/Inter/Inter-Bold.ttf);
+}
+
+@font-face {
+  font-family: Inter-Semibold;
+  src: url(/Assets/Fonts/Inter/Inter-SemiBold.ttf);
+}
+@font-face {
+  font-family: Inter-Regular;
+  src: url(/Assets/Fonts/Inter/Inter-Regular.ttf);
+}
+
+body {
+  font-family: Inter-Regular;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.logo {
+  width: 220px;
+  margin-bottom: 50px;
+}
+.container {
+  align-items: center;
+  align-content: center;
+  justify-items: center;
+  width: 600px;
+  height: 500px;
+  padding: 20px;
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.service {
+  width: 400px;
+}
+
+label {
+  font-family: Inter-Regular;
+  display: block;
+  margin: 15px 0 5px;
+  color: #4a4a4a;
+  font-weight: bold;
+}
+select,
+button {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #4a4a4a;
+  border-radius: 15px;
+  font-size: 16px;
+}
+button {
+  background-color: #94d697;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #a6dda9;
+}
+
+a {
+  font-size: 20px;
+}

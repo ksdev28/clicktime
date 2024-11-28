@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style-dias.css" />
+    <title>Escolha de Data e Horário</title>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Escolha o Dia e Horário</h2>
+      <form class="form" id="form-agendamento">
+        <label for="data">Escolha a data:</label>
+        <input type="date" id="data" name="data" required />
+
+        <label for="horario">Escolha o horário:</label>
+        <div class="time-buttons">
+          <button type="button" onclick="selectTime(this)">08:00</button>
+          <button type="button" onclick="selectTime(this)">09:00</button>
+          <button type="button" onclick="selectTime(this)">10:00</button>
+          <button type="button" onclick="selectTime(this)">11:00</button>
+          <button type="button" onclick="selectTime(this)">13:00</button>
+          <button type="button" onclick="selectTime(this)">14:00</button>
+          <button type="button" onclick="selectTime(this)">15:00</button>
+          <button type="button" onclick="selectTime(this)">16:00</button>
+          <button type="button" onclick="selectTime(this)">17:00</button>
+        </div>
+
+        <button type="submit">Confirmar Agendamento</button>
+      </form>
+
+      <!-- Modal de Notificação -->
+      <div id="notificationModal" class="modal">
+        <div class="modal-content">
+          <p id="notificationMessage"></p>
+          <button onclick="closeModal()">Fechar</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Variáveis para armazenar o horário e data selecionados
+      let selectedTime = null;
+
+      // Função para marcar o horário selecionado
+      function selectTime(button) {
+        const buttons = document.querySelectorAll(".time-buttons button");
+        buttons.forEach((btn) => btn.classList.remove("selected"));
+        button.classList.add("selected");
+        selectedTime = button.innerText; // Salva o horário selecionado
+      }
+
+      // Função para enviar os dados ao backend
+      async function enviarAgendamento(data, horario) {
+        const backendUrl = "http://localhost:4000/agendamento"; // Altere conforme a URL do seu backend
+
+        try {
+          const response = await fetch(backendUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              data: data,
+              horario: horario,
+              // Adicione os outros dados necessários como ID do profissional, serviço, etc.
+            }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Erro ao salvar agendamento:", errorData);
+            throw new Error(errorData.error || "Erro desconhecido.");
+          }
+
+          const dataResponse = await response.json();
+          console.log("Agendamento salvo com sucesso:", dataResponse);
+
+          // Exibe a notificação de sucesso
+          document.getElementById("notificationMessage").textContent =
+            "Agendamento confirmado com sucesso!";
+          document.getElementById("notificationModal").style.display = "block";
+
+          // Redireciona após um tempo
+          setTimeout(() => {
+            window.location.href = "confirmacao-agendamento.html"; // Altere para a página de confirmação
+          }, 2000);
+        } catch (error) {
+          console.error("Erro ao salvar agendamento:", error);
+          alert("Erro ao confirmar agendamento. Tente novamente.");
+        }
+      }
+
+      // Evento de envio do formulário
+      document
+        .getElementById("form-agendamento")
+        .addEventListener("submit", (event) => {
+          event.preventDefault(); // Impede o envio do formulário
+
+          const data = document.getElementById("data").value; // Captura a data selecionada
+          if (!data || !selectedTime) {
+            alert("Por favor, selecione uma data e um horário.");
+            return;
+          }
+
+          // Envia o agendamento para o backend
+          enviarAgendamento(data, selectedTime);
+        });
+
+      // Função para fechar a notificação
+      function closeModal() {
+        document.getElementById("notificationModal").style.display = "none";
+      }
+    </script>
+  </body>
+</html>

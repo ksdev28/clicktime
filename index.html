@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClickTime - Agendamento Facilitado</title>
+    <link rel="stylesheet" href="css/style.css" />
+
+     <!-- AOS CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  </head>
+  <body class="body">
+    <header class="header">
+      <nav class="bar">
+        <img
+          src="Assets/ClickTime.png"
+          width="188px"
+          height="37px"
+          class="logo"
+        />
+        <button type="submit" class="botao">
+          <a href="form.html" class="label1">Faça seu Agendamento!</a>
+        </button>
+      </nav>
+    </header>
+    <div class="retangulo">
+      <label class="textR">Agendamento Facilitado!</label>
+    </div>
+    <div class="texto">
+      <h1>Escolha o melhor horário para<br />você!</h1>
+      <p class="paragrap">
+        Veja os horários disponíveis e marque seu serviço com apenas alguns
+        cliques. Acompanhe tudo<br />diretamente pela nossa plataforma e receba
+        lembretes por e-mail ou SMS.
+      </p>
+    </div>
+    <div class="texto2">
+      <h1>Escolha o melhor horário para você!</h1>
+      <p class="paragrap2">
+        Veja os horários disponíveis e marque seu serviço com apenas alguns
+        cliques.<br />
+        <br />Acompanhe tudo diretamente pela nossa plataforma e receba
+        lembretes por e-mail ou SMS.
+      </p>
+    </div>
+    <div class="conteiner"  data-aos="fade-up">
+      <img
+        src="/Assets/Images/foto1.jpg"
+        width="545.35px"
+        height="350px"
+        class="imagem"
+      />
+      <img
+        src="/Assets/Images/foto2.jpg"
+        width="545.35px"
+        height="350px"
+        class="imagem"
+      />
+      <img
+        src="/Assets/Images/foto3.jpg"
+        width="545.35px"
+        height="350px"
+        class="imagem"
+      />
+    </div>
+    <div class="carousel-mobile">
+      <div class="carousel-inner">
+        <div class="carousel-item">
+          <img
+            src="Assets/Images/foto1.jpg"
+            class="foto1"
+            width="350px"
+            height="220px"
+          />
+        </div>
+        <div class="carousel-item">
+          <img
+            src="Assets/Images/foto2.jpg"
+            class="foto2"
+            width="350px"
+            height="220px"
+          />
+        </div>
+        <div class="carousel-item">
+          <img
+            src="Assets/Images/foto3.jpg"
+            class="foto3"
+            width="350px"
+            height="220px"
+          />
+        </div>
+      </div>
+      <!-- AOS JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1500,  // Duração da animação em milissegundos
+            once: true       // A animação ocorre apenas uma vez ao rolar
+        });
+    </script>
+      <script>
+        let currentSlide = 0;
+
+        function showSlide(index) {
+          const slides = document.querySelector(".carousel-inner");
+          const totalSlides = slides.children.length;
+
+          currentSlide = (index + totalSlides) % totalSlides;
+
+          slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        setInterval(() => {
+          showSlide(currentSlide + 1);
+        }, 5000);
+      </script>
+    </div>
+    <div class="page2">
+      <div class="titulo2" data-aos="fade-up">
+        <h1 class="h1-2">Quais Serviços Encontro No<br />ClickTime?</h1>
+      </div>
+      <div class="table"  data-aos="fade-up">
+        <div class="service-box">
+          <section class="title-line">
+            <img
+              src="Assets/Images/marca-de-verificacao.svg"
+              width="75px"
+              height="61px"
+              class="img-verificado"
+            />
+            <h3>Barbearia</h3>
+          </section>
+          <p>
+            Corte de cabelo, barba, design de barba, tratamentos capilares
+            masculinos, pacotes combinados (cabelo + barba).
+          </p>
+        </div>
+        <div class="service-box">
+          <section class="title-line">
+            <img
+              src="Assets/Images/marca-de-verificacao.svg"
+              width="75px"
+              height="61px"
+              class="img-verificado"
+            />
+            <h3>Cabeleireiro</h3>
+          </section>
+          <p>
+            Corte feminino e masculino, coloração, hidratação, alisamento,
+            penteado e escova.
+          </p>
+        </div>
+        <div class="service-box">
+          <section class="title-line">
+            <img
+              src="Assets/Images/marca-de-verificacao.svg"
+              width="75px"
+              height="61px"
+              class="img-verificado"
+            />
+            <h3>Manicure</h3>
+          </section>
+          <p>
+            Aplicação de esmalte, tratamento de unhas, unhas de gel ou acrílico,
+            manicure e pedicure simples ou completa.
+          </p>
+        </div>
+        <div class="service-box">
+          <section class="title-line">
+            <img
+              src="Assets/Images/marca-de-verificacao.svg"
+              width="75px"
+              height="61px"
+              class="img-verificado"
+            />
+            <h3>Estética</h3>
+          </section>
+          <p>
+            Limpeza de pele, peeling, massagens faciais, drenagem linfática,
+            tratamentos anti-idade.
+          </p>
+        </div>
+        <div class="service-box">
+          <section class="title-line">
+            <img
+              src="Assets/Images/marca-de-verificacao.svg"
+              width="75px"
+              height="61px"
+              class="img-verificado"
+            />
+            <h3>Maquiagem</h3>
+          </section>
+          <p>
+            Maquiagem social, maquiagem para festas e eventos, maquiagem para
+            noivas.
+          </p>
+        </div>
+        <div class="service-box">
+          <section class="title-line">
+            <img
+              src="Assets/Images/marca-de-verificacao.svg"
+              width="75px"
+              height="61px"
+              class="img-verificado"
+            />
+            <h3>Depilação</h3>
+          </section>
+          <p>Depilação com cera, depilação a laser, design de sobrancelhas.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="page3">
+      <h1 class="Titulo3"  data-aos="fade-up">
+        Garanta seu horário e aproveite o atendimento que merece!
+      </h1>
+      <p class="paragrap3"  data-aos="fade-up">
+        Simplifique sua rotina e cuide de você!<br />No ClickTime, agendar é
+        fácil e rápido. Escolha o<br />serviço, o profissional e o horário ideal
+        o resto fica com a gente!
+      </p>
+      <div class="ilustration"  data-aos="fade-up">
+        <img src="Assets/Images/ILUSTRAÇÃO.svg" width="80%"/>
+      </div>
+      <div class="bt-class">
+        <button type="submit" class="bt-agendamento">
+          <img src="Assets/Images/calendar.svg" class="icon" />
+          <label class="bt-label"
+            ><a class="agenda-a" href="form.html">Agendar Horário!</a></label>
+      </div>
+      </div>
+    </div>
+  </body>
+  <footer class="footer">
+    <img class="logo-footer" src="Assets/ClickTime.png">
+    <div class="icons">
+      <a href="www.facebook.com.br"><img src="Assets/Images/facebook.svg" width="35px"></a>
+      <a href="www.instagram.com.br"><img src="Assets/Images/instagram.svg" width="35px"></a>
+      <a href="www.linkedin.com.br"><img src="Assets/Images/linkedin.svg" width="35px"></a>
+      <a href="www.threads.com.br"><img src="Assets/Images/threads.svg" width="35px"></a>
+      <a href="www.x.com.br"><img src="Assets/Images/x.svg" width="35px"></a>
+    </div>
+    <p class="copy">ClickTime Agendamento Facilitado 2024 - Todos os Direitos Reservados.</p>
+  </footer>
+</html>
