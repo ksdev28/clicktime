@@ -116,79 +116,61 @@
     </div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const backendUrl = "http://localhost:4000/";
+      const backendUrl = "http://localhost:4000/"; // Certifique-se de que está correto
 
-        // Carrega o token e o usuário ID do localStorage
-        const usuarioId = localStorage.getItem("usuarioId");
-        const token = localStorage.getItem("token");
+      document
+        .getElementById("formUsuario")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
 
-        console.log("usuarioId:", usuarioId); // Verificando se o usuarioId está correto
-        console.log("token:", token); // Verificando se o token está correto
+          // Coleta os dados do formulário
+          const payload = {
+            nome: document.getElementById("nome").value.trim(),
+            sobrenome: document.getElementById("sobrenome").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            senha: document.getElementById("senha").value.trim(),
+          };
 
-        // Verifica se o usuário ID e token estão presentes
-        if (!usuarioId || !token) {
-          console.error("Usuário ou Token não encontrados!");
-          return;
-        }
-
-        // Função para salvar a empresa escolhida
-        async function salvarEmpresaEscolhida(empresaId) {
-          if (!token || !usuarioId) {
-            console.error("Token ou usuário não encontrado!");
+          // Validação simples dos dados no frontend
+          if (
+            !payload.nome ||
+            !payload.sobrenome ||
+            !payload.email ||
+            !payload.senha
+          ) {
+            alert("Todos os campos devem ser preenchidos.");
             return;
           }
 
-          const data = {
-            usuarioId: usuarioId,
-            empresaId: empresaId,
-          };
+          console.log("Payload enviado ao backend:", payload);
 
           try {
-            const response = await fetch(`${backendUrl}empresa-escolhida`, {
+            const response = await fetch(`${backendUrl}cadastrar-usuario`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
               },
-              body: JSON.stringify(data),
+              body: JSON.stringify(payload),
             });
 
-            if (response.ok) {
-              const result = await response.json();
-              console.log("Sucesso:", result);
-              window.location.href = `servicos${empresaId}.html`;
+            const data = await response.json();
+            console.log("Resposta recebida do backend:", data);
+
+            // Verifica se o token e o usuarioId foram retornados
+            if (data.token && data.usuarioId) {
+              localStorage.setItem("usuarioId", data.usuarioId); // Salva o ID do usuário
+              localStorage.setItem("token", data.token); // Salva o token
+              console.log("Token e usuarioId salvos com sucesso!");
+
+              window.location.href = "empresas.html"; // Redireciona para a página de empresas após o sucesso
             } else {
-              const errorResponse = await response.text();
-              console.error("Erro ao salvar empresa:", errorResponse);
+              alert("Erro desconhecido. O usuário não foi criado.");
             }
           } catch (error) {
-            console.error("Erro ao fazer requisição:", error);
+            console.error("Erro ao conectar ao servidor:", error);
+            alert("Erro ao conectar ao servidor. Por favor, tente novamente.");
           }
-        }
-
-        // Captura o clique em qualquer card de empresa
-        const empresaCards = document.querySelectorAll(".empresa-card");
-        empresaCards.forEach(function (card) {
-          card.addEventListener("click", function () {
-            // Recupera o 'data-id' da empresa
-            const empresaId = this.getAttribute("data-id");
-            console.log("Empresa escolhida: ID =", empresaId); // Exibe o ID da empresa no console
-
-            // Adiciona a classe 'selected' para o card clicado (feedback visual)
-            empresaCards.forEach(function (c) {
-              c.classList.remove("selected");
-            });
-            this.classList.add("selected");
-
-            // Armazena o ID da empresa no localStorage
-            localStorage.setItem("empresaId", empresaId);
-
-            // Chama a função para salvar a empresa escolhida
-            salvarEmpresaEscolhida(empresaId);
-          });
         });
-      });
     </script>
   </body>
 </html>

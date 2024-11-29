@@ -53,70 +53,75 @@
       <img src="Assets/Images/foto1.jpg" class="img2" />
       <img src="Assets/Images/foto3.jpg" class="img3" />
     </div>
-
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const backendUrl = "http://localhost:4000/";
+      const backendUrl = "http://localhost:4000/"; // Certifique-se de que está correto
 
-        // Carrega o token e o usuário ID do localStorage
-        const usuarioId = localStorage.getItem("usuarioId");
+      // Defina o backendUrl no topo do script
+
+      async function salvarEmpresaEscolhida(empresaId) {
+        // Recupera o ID do usuário e o token do localStorage
+        const usuarioId = localStorage.getItem("usuarioId"); // Pega o ID do usuário do localStorage
         const token = localStorage.getItem("token");
 
-        // Função para salvar a empresa escolhida
-        async function salvarEmpresaEscolhida(empresaId) {
-          if (!token || !usuarioId) {
-            console.error("Token ou usuário não encontrado!");
+        console.log("usuarioId:", usuarioId);
+        console.log("token:", token);
+
+        // Verifica se o token ou o ID do usuário estão ausentes
+        if (!token || !usuarioId) {
+          console.error("Token ou usuário não encontrado!");
+          alert("Erro: Token ou ID do usuário não encontrados.");
+          return;
+        }
+
+        // Processa o cadastro ou login bem-sucedido com a resposta do backend
+        try {
+          const response = await fetch(`${backendUrl}salvar-empresa`, {
+            // Corrigido para a rota 'empresa-escolhida'
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // Se necessário, envie o token no header de autorização
+            },
+            body: JSON.stringify({
+              usuarioId: usuarioId,
+              empresaId: empresaId,
+            }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Erro ao salvar a empresa:", errorData);
+            alert("Erro ao salvar a empresa.");
             return;
           }
 
-          const data = {
-            usuarioId: usuarioId,
-            empresaId: empresaId,
-          };
+          const data = await response.json();
+          console.log("Empresa salva com sucesso:", data);
 
-          try {
-            const response = await fetch(`${backendUrl}empresa-escolhida`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify(data),
-            });
-
-            if (response.ok) {
-              const result = await response.json();
-              console.log("Sucesso:", result);
-              window.location.href = `servicos${empresaId}.html`;
-            } else {
-              const errorResponse = await response.text();
-              console.error("Erro ao salvar empresa:", errorResponse);
-            }
-          } catch (error) {
-            console.error("Erro ao fazer requisição:", error);
-          }
+          // Redireciona após o sucesso
+          window.location.href = "alguma-outra-pagina.html"; // Redirecionar conforme necessário
+        } catch (error) {
+          console.error("Erro ao conectar ao servidor:", error);
+          alert("Erro ao conectar ao servidor. Por favor, tente novamente.");
         }
+      }
 
-        // Captura o clique em qualquer card de empresa
-        const empresaCards = document.querySelectorAll(".empresa-card");
-        empresaCards.forEach(function (card) {
-          card.addEventListener("click", function () {
-            // Recupera o 'data-id' da empresa
-            const empresaId = this.getAttribute("data-id");
-            console.log("Empresa escolhida: ID =", empresaId); // Exibe o ID da empresa no console
+      // Captura o clique em qualquer card de empresa
+      const empresaCards = document.querySelectorAll(".empresa-card");
+      empresaCards.forEach(function (card) {
+        card.addEventListener("click", function () {
+          // Recupera o 'data-id' da empresa
+          const empresaId = this.getAttribute("data-id");
+          console.log("Empresa escolhida: ID =", empresaId); // Exibe o ID da empresa no console
 
-            // Adiciona a classe 'selected' para o card clicado (feedback visual)
-            empresaCards.forEach(function (c) {
-              c.classList.remove("selected");
-            });
-            this.classList.add("selected");
-
-            // Armazena o ID da empresa no localStorage
-            localStorage.setItem("empresaId", empresaId);
-
-            // Chama a função para salvar a empresa escolhida
-            salvarEmpresaEscolhida(empresaId);
+          // Adiciona a classe 'selected' para o card clicado (feedback visual)
+          empresaCards.forEach(function (c) {
+            c.classList.remove("selected");
           });
+          this.classList.add("selected");
+
+          // Chama a função para salvar a empresa escolhida
+          salvarEmpresaEscolhida(empresaId);
         });
       });
     </script>

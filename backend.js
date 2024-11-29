@@ -37,6 +37,49 @@ const sequelize = new Sequelize("click_data", "postgres", "root", {
 });
 
 // Modelos
+
+// Exemplo de definição do modelo UsuarioEmpresa
+module.exports = (sequelize, DataTypes) => {
+  const UsuarioEmpresa = sequelize.define("UsuarioEmpresa", {
+    usuarioId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Usuarios",
+        key: "id",
+      },
+    },
+    empresaId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Empresas",
+        key: "id",
+      },
+    },
+  });
+
+  return UsuarioEmpresa;
+};
+
+// Definição do modelo Agendamento
+const Agendamento = sequelize.define("Agendamento", {
+  usuario_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  servico_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  data: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  horario: {
+    type: DataTypes.TIME,
+    allowNull: false,
+  },
+});
+
 const Empresa = sequelize.define("Empresa", {
   nome_empresa: { type: DataTypes.STRING, allowNull: false },
 });
@@ -139,7 +182,6 @@ function enviarEmailConfirmacao(clienteEmail, data, horario) {
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
-
 app.post("/cadastrar-usuario", async (req, res) => {
   const { nome, sobrenome, email, senha } = req.body;
 
@@ -148,23 +190,69 @@ app.post("/cadastrar-usuario", async (req, res) => {
   }
 
   try {
+    // Hashing the password before saving it to the database
+    const hashedPassword = await bcrypt.hash(senha, 10);
+
+    // Criação do usuário no banco de dados
     const novoUsuario = await Usuario.create({
       nome,
       sobrenome,
       email,
-      senha,
+      senha: hashedPassword, // Salvando a senha de forma segura
     });
 
-    // Verifique se o ID está sendo retornado corretamente
-    console.log("Usuário criado com ID:", novoUsuario.id);
+    console.log("Usuário criado com ID:", novoUsuario.id); // Verifica se o usuário foi criado corretamente
 
-    res.status(201).json({
+    // Gerando o token JWT aqui após a criação do usuário
+    const token = jwt.sign(
+      { usuarioId: novoUsuario.id }, // Payload do token (informações do usuário)
+      process.env.JWT_SECRET, // Chave secreta (verifique se a chave está definida corretamente no .env)
+      { expiresIn: "1h" } // Expiração do token
+    );
+
+    // Exibindo o token no console para verificação
+    console.log("Token gerado:", token); // Verifique no console se o token está sendo gerado corretamente
+
+    // Enviando a resposta com o token e o usuarioId
+    return res.status(201).json({
       message: "Usuário cadastrado com sucesso!",
-      usuarioId: novoUsuario.id, // Retorna o ID gerado
+      usuarioId: novoUsuario.id,
+      token: token, // Incluindo o token na resposta
     });
   } catch (error) {
     console.error("Erro ao cadastrar usuário:", error);
-    res.status(500).json({ error: "Erro interno no servidor" });
+    return res.status(500).json({ error: "Erro interno no servidor" });
+  }
+});
+app.post("/salvar-empresa", async (req, res) => {
+  const { usuarioId, empresaId } = req.body;
+
+  try {
+    // Verifica se o usuário e a empresa existem
+    const usuario = await Usuario.findByPk(usuarioId);
+    const empresa = await Empresa.findByPk(empresaId);
+
+    if (!usuario || !empresa) {
+      return res
+        .status(404)
+        .json({ error: "Usuário ou empresa não encontrados" });
+    }
+
+    // Cria a relação no banco de dados entre usuário e empresa
+    const usuarioEmpresa = await UsuarioEmpresa.create({
+      usuarioId: usuarioId,
+      empresaId: empresaId,
+    });
+
+    res
+      .status(201)
+      .json({
+        message: "Relação usuário-empresa criada com sucesso",
+        usuarioEmpresa,
+      });
+  } catch (error) {
+    console.error("Erro ao salvar empresa:", error);
+    res.status(500).json({ error: "Erro ao salvar empresa" });
   }
 });
 
@@ -240,36 +328,50 @@ app.get("/empresa", async (req, res) => {
   }
 });
 
-app.post("/empresa-escolhida", (req, res) => {
-  // Extraindo 'usuarioId' e 'empresaId' do corpo da requisição
-  const { usuarioId, empresaId } = req.body;
+// Função que salva a empresa escolhida para o usuário
+async function salvarEmpresa(usuarioId, empresaId) {
+  try {
+    // Exemplo de código de como você pode salvar a relação entre usuário e empresa
+    const usuario = await Usuario.findByPk(usuarioId); // Busca o usuário pelo ID
+    const empresa = await Empresa.findByPk(empresaId); // Busca a empresa pelo ID
 
-  // Verifica se ambos os parâmetros foram fornecidos
-  if (!usuarioId || !empresaId) {
-    console.error("Usuário ou Empresa não informados.");
-    return res
-      .status(400)
-      .json({ error: "Usuário ou Empresa não informados." });
+    if (!usuario || !empresa) {
+      throw new Error("Usuário ou empresa não encontrados");
+    }
+
+    // Aqui você pode salvar a relação no banco de dados, por exemplo
+    await UsuarioEmpresa.create({ usuarioId, empresaId }); // Supondo que você tenha um modelo UsuarioEmpresa
+
+    return true; // Retorna verdadeiro se a operação for bem-sucedida
+  } catch (error) {
+    console.error("Erro ao salvar empresa:", error);
+    throw error; // Lança o erro para ser tratado no middleware
   }
+}
 
-  // Usando o Sequelize para buscar o usuário com o 'usuarioId'
-  Usuario.findByPk(usuarioId)
-    .then((usuario) => {
-      if (!usuario) {
-        return res.status(404).json({ error: "Usuário não encontrado." });
-      }
+app.post("/empresa-escolhida", async (req, res, next) => {
+  try {
+    const { usuarioId, empresaId } = req.body;
 
-      // Salva a 'empresaEscolhida' no usuário
-      usuario.empresa_id = empresaId; // Ajuste para o campo correto no seu modelo de banco de dados
-      return usuario.save(); // Salva as alterações no banco
-    })
-    .then(() => {
-      res.status(200).json({ message: "Empresa escolhida salva com sucesso." });
-    })
-    .catch((err) => {
-      console.error("Erro ao processar a requisição:", err);
-      res.status(500).json({ error: "Erro ao salvar a empresa escolhida." });
-    });
+    if (!usuarioId || !empresaId) {
+      return res
+        .status(400)
+        .json({ error: "Usuário ou empresa não encontrados" });
+    }
+
+    const empresaEscolhida = await salvarEmpresa(usuarioId, empresaId);
+
+    if (empresaEscolhida) {
+      return res
+        .status(200)
+        .json({ success: "Empresa escolhida salva com sucesso!" });
+    }
+
+    return res.status(404).json({ error: "Erro ao salvar a empresa" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Erro ao processar a requisição" });
+  }
 });
 
 // Endpoint para cadastrar um serviço
@@ -363,7 +465,7 @@ app.post("/profissional-servico", verificarToken, async (req, res) => {
   }
 });
 
-app.post("/agendar-servico", verificarToken, async (req, res) => {
+app.post("/agendar-servico", async (req, res) => {
   const { usuarioId, servicoId, data, horario } = req.body;
 
   // Validação dos dados
@@ -403,7 +505,7 @@ app.post("/agendar-servico", verificarToken, async (req, res) => {
 // Inicializar a aplicação
 app.listen(4000, async () => {
   try {
-    await sequelize.sync({}); // Sincronizar os modelos com o banco de dados
+    await sequelize.sync({ alter: true }); // Sincronizar os modelos com o banco de dados
     console.log("Servidor rodando na porta 4000.");
   } catch (error) {
     console.error("Erro ao inicializar o banco de dados:", error);
